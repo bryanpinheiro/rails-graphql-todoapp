@@ -1,24 +1,78 @@
-# README
+# Official Guide
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+https://graphql-ruby.org/guides
 
-Things you may want to cover:
+1. Create a new Rails project
 
-* Ruby version
+```bash
+rails new rails-graphql-todoapp --api
+```
 
-* System dependencies
+2. Generate the Todo model
 
-* Configuration
+```bash
+rails generate model Todo title:string completed:boolean:default(false)
+```
 
-* Database creation
+3. Run migrations
 
-* Database initialization
+```bash
+rails db:migrate
+```
 
-* How to run the test suite
+3. Integrate GraphQL and GraphiQL
 
-* Services (job queues, cache servers, search engines, etc.)
+```bash
+gem 'graphql'
+gem 'graphiql-rails', group: :development
+```
 
-* Deployment instructions
+4. Install gems
 
-* ...
+```bash
+bundle
+```
+
+5. Generate GraphQL files:
+
+```bash
+rails generate graphql:install
+```
+
+```bash
+bundle
+```
+
+```bash
+rails g graphql:object Todo title:String completed:Boolean
+```
+
+6. Mounth the GraphiQL Engine:
+
+```ruby
+Rails.application.routes.draw do
+  # ...
+  if Rails.env.development?
+    mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/your/endpoint"
+  end
+end
+```
+
+7. Add configurations
+
+application.rb:
+```
+require "sprockets/railtie"
+```
+
+app/assets/config/manifest.js:
+```
+//= link graphiql/rails/application.css
+//= link graphiql/rails/application.js
+```
+
+6. Run server
+
+```bash
+rails s
+```
